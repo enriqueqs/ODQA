@@ -13,7 +13,7 @@ porter = PorterStemmer()
 def pre_process(document, stopwords = True, lemmitize = True, stemming = True):
     document = re.sub(r'\s+',' ',document)
     document = document.lower()
-    
+
     tokens = word_tokenize(document)
     if stopwords == True:
         tokens = [token for token in tokens if not token in stop_words]
@@ -26,10 +26,4 @@ def pre_process(document, stopwords = True, lemmitize = True, stemming = True):
     filtered_doc = filtered_doc.translate(punctuation)
     
     return re.sub(' +', ' ', filtered_doc)
-
-def split_documents(documents):
-    paragraphs = dict()
-    index = 0
-    for doc in documents:
         
-
