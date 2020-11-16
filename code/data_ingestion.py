@@ -129,3 +129,19 @@ company. Mr Sewell was killed on the spot, becoming the first driver of a petrol
     
 'url': ['http://www.nationalmotormuseum.org.uk/motoring_firsts']}
 '''
+
+def one_to_one(data) ->dict:
+    out = {}
+    for question in data:
+        q=  question['question']
+        qty = len(question['search_results']['rank'])
+        if (qty<2):
+            continue
+        out[q]=question['search_results']['search_context'][0]
+    return out
+
+
+reduced_dataset2 = one_to_one(train_0_200_ds)
+data_path="/Users/enriqueqs/Github_repos/ODQA/data/processed"
+with open(data_path + '/data_one.pickle', 'wb') as f:
+    pickle.dump(reduced_dataset2, f)
