@@ -1,10 +1,19 @@
+import pickle
+import os 
 import numpy as np
 import random
+random.seed(1234)
+
+cwd = os.getcwd()
+with open(cwd + "/data/processed/data.pickle","rb") as file:
+    dictionary = pickle.load(file)
 
 def random_baseline(question):
-    docs = dictionary[question]
-    indexes [index for index, value in enumerate(docs)]
+    indexes = list(dictionary[question]['ranks'].values())
 
-    rand = random.choice(indexes))
+    rand = random.choice(indexes)
 
-    return [rand, docs[rand]]
+    if rand == dictionary[question]['ranks'][0]:
+        return 1
+    else:
+        return 0
