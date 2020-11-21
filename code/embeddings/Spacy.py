@@ -1,13 +1,57 @@
 import spacy
+import os, sys
+import random
+from datasets import load_dataset
+cwd = os.getcwd()
+sys.path.append(cwd + "/code")
+from pre_processing import pre_process
 
 
-nlp = spacy.load("en_trf_bertbaseuncased_lg")
-paragraph = nlp("The National Motor Museum Trust The National Motor Museum Trust Home > Story of Motoring > Motoring Firsts Motoring Firsts Among  the questions we are most frequently asked are the various motoring firsts. Listed below are some of the most common questions that have been answered by our Motoring Research Service.Questions What were the first motor cars The motor car was developed over many years by a number of talented individuals but Karl Benz of Mannheim in Germany is normally credited as the Inventor of the Motor Car. In the autumn of 1885, his three-wheeled vehicle became the first successful petrol-engined car. He was awarded a patent for it on 29 January 1886, and became the first motor manufacturer in 1888 with his Modell 3 Benz. In 1886, Gottlieb Daimler and his protégé Wilhelm Maybach built the first successful four-wheeled petrol-driven car at Bad Cannstatt. The Daimler Motoren Gesellschaft was established four years later in 1890. On 1 July 1926 Benz and Daimler merged to become Daimler-Benz AG and its products Mercedes-Benz.")
-question = nlp("Which innovation for the car was developed by Prince Henry of Prussia in 1911?")
+def spacy_embedding(text):
+    text = pre_process(text, stopwords = True, lemmitize = True, stemming = True)
+    ebd = nlp(text)
+    return ebd
 
 
-# sentence similarity
-print('similarity: ', question.similarity(paragraph)) #0.69861203
+def get_quest_doc(dataset, doc_only=False):
+    idx = random.randint(0, len(dataset)-1)
+    context = dataset[idx]['search_results']['search_context']
+    if len(context) == 0:
+        print(0)
+        return get_quest_doc(dataset, doc_only)
+    else:
+        doc_idx = random.randint(0, len(context)-1)
+        doc = context[doc_idx]
+        quest = dataset[idx]['question']
+        if doc_only == True: 
+            return doc
+        else:
+            return quest, doc
+
+
+if __name__ == "__main__":
+    sims = []
+    dataset = load_dataset('trivia_qa', 'rc')['train']
+    nlp = spacy.load("en_trf_bertbaseuncased_lg")
+
+    quest, tartget_doc = get_quest_doc(dataset, doc_only=False)
+    quest_ebd =  spacy_embedding(quest)
+    tartget_doc_ebd = spacy_embedding(tartget_doc)
+
+    sims.append(quest_ebd.similarity(tartget_doc_ebd))
+
+    for i in range(10):
+        print(i*10,'%')
+        random_doc = spacy_embedding(get_quest_doc(dataset, doc_only=True))
+        sims.append(quest_ebd.similarity(random_doc))
+
+    if max(sims) == sims[0]:
+        print(sims)
+        print('suc')
+    else:
+        print(sims)
+        print('fail')
+       
 
 # sentence embeddings
-print('vector: ', question.vector)  # or apple1.tensor.sum(axis=0)
+# print('vector: ', question.vector)  # or apple1.tensor.sum(axis=0)
