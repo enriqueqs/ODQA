@@ -58,15 +58,9 @@ def getSimilarityScore(questIndex, random=True):
 
 
 def getRetriveResult(scores):
-
-    if max(scores) == scores[0]:
-        print(scores)
-        print('successed')
-        return True
-    else:
-        print(scores)
-        print('fail')
-        return False
+    outputMsg = str(scores) + "success" if max(scores) == scores[0] else str(scores) + "fail" 
+    print(outputMsg)
+    return True if max(scores) == scores[0] else False
 
 if __name__ == "__main__":
     scores = []
