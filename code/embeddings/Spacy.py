@@ -1,57 +1,78 @@
+
 import spacy
-import os, sys
-import random
+import os
+import sys
+from random import randint
 from datasets import load_dataset
 cwd = os.getcwd()
 sys.path.append(cwd + "/code")
 from pre_processing import pre_process
 
+class SpacyEmbed:
+    def __init__(self):
+        self.nlp = spacy.load("en_trf_bertbaseuncased_lg")
 
-def spacy_embedding(text):
-    text = pre_process(text, stopwords = True, lemmitize = True, stemming = True)
-    ebd = nlp(text)
-    return ebd
+    def embed(self, text):
+        text = pre_process(text, stopwords=True, lemmitize=True, stemming=True)
+        return self.nlp(text)
+        
+
+class TriviaQA:
+    def __init__(self):
+        self.trainData = load_dataset('trivia_qa', 'rc')['train']
+
+    def getRandomIndex(self):
+        idx = randint(0, len(self.trainData)-1)
+        while len(self.getContext(idx)) == 0:
+            idx = randint(0, len(self.trainData))
+        return idx
+    
+    def getRandomDoc(self):
+        idx = self.getRandomIndex()
+        context = self.getContext(idx)
+        return context[randint(0, len(context)-1)]
+
+    def getQuestion(self, idx):
+        return self.trainData[idx]['question']
+
+    def getContext(self, idx):
+        return self.trainData[idx]['search_results']['search_context']
+
+    def __len__(self):
+        return len(self.trainData)
 
 
-def get_quest_doc(dataset, doc_only=False):
-    idx = random.randint(0, len(dataset)-1)
-    context = dataset[idx]['search_results']['search_context']
-    if len(context) == 0:
-        print(0)
-        return get_quest_doc(dataset, doc_only)
+def getSimilarityScore(questIndex, random=True):
+    question = triviaQA.getQuestion(questIndex)
+    questEmbedding = spacyEmbed.embed(question)
+
+    if not random:
+        context = triviaQA.getContext(questIndex)
+        doc = context[randint(0,len(context)-1)]
     else:
-        doc_idx = random.randint(0, len(context)-1)
-        doc = context[doc_idx]
-        quest = dataset[idx]['question']
-        if doc_only == True: 
-            return doc
-        else:
-            return quest, doc
+        doc = triviaQA.getRandomDoc()
 
+    docEmbedding = spacyEmbed.embed(doc)
+    return questEmbedding.similarity(docEmbedding)
+
+
+
+def getRetriveResult(scores):
+    outputMsg = str(scores) + "success" if max(scores) == scores[0] else str(scores) + "fail" 
+    print(outputMsg)
+    return True if max(scores) == scores[0] else False
 
 if __name__ == "__main__":
-    sims = []
-    dataset = load_dataset('trivia_qa', 'rc')['train']
-    nlp = spacy.load("en_trf_bertbaseuncased_lg")
+    scores = []
+    triviaQA = TriviaQA()
+    spacyEmbed = SpacyEmbed()
+    idx = triviaQA.getRandomIndex()
 
-    quest, tartget_doc = get_quest_doc(dataset, doc_only=False)
-    quest_ebd =  spacy_embedding(quest)
-    tartget_doc_ebd = spacy_embedding(tartget_doc)
-
-    sims.append(quest_ebd.similarity(tartget_doc_ebd))
-
+    scores.append(getSimilarityScore(idx, random=False))
     for i in range(10):
-        print(i*10,'%')
-        random_doc = spacy_embedding(get_quest_doc(dataset, doc_only=True))
-        sims.append(quest_ebd.similarity(random_doc))
+        print(i*10, '%')
+        scores.append(getSimilarityScore(idx))
 
-    if max(sims) == sims[0]:
-        print(sims)
-        print('suc')
-    else:
-        print(sims)
-        print('fail')
-       
+    getRetriveResult(scores)
 
-# sentence embeddings
-# print('vector: ', question.vector)  # or apple1.tensor.sum(axis=0)
+
