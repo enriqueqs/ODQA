@@ -1,12 +1,4 @@
-
 import spacy
-import os
-import sys
-from random import randint
-from triviaData import TriviaQA
-cwd = os.getcwd()
-sys.path.append(cwd + "/code")
-from pre_processing import pre_process
 
 class SpacyEmbed:
     def __init__(self):
@@ -24,6 +16,7 @@ class SpacyEmbed:
         if rs_idx < correct_idx:
             return 1
         else:
+<<<<<<< HEAD
             return 0
 
 
@@ -66,3 +59,6 @@ if __name__ == "__main__":
     # getRetriveResult(scores)
 
 
+=======
+            return 0
+>>>>>>> 62f6d8dfa6403407e1475bb6fca47785066c7f5e

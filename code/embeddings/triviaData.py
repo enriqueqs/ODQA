@@ -24,7 +24,7 @@ class TriviaQA:
         return context[randint(0, len(context)-1)]
 
     def getQuestion(self, idx):
-        return pre_process(self.trainData[idx]['question'])
+        return pre_process(self.trainData[idx]['question'], stemming=False)
 
     def getAnswer(self, idx):
         return self.trainData[idx]['answer']['normalized_value']
@@ -34,7 +34,7 @@ class TriviaQA:
     
     def getDocBlocks(self, idx, blockSize=100, stride=20):
         doc = self.getContext(idx)[0]
-        doc = pre_process(doc).split()
+        doc = pre_process(doc, stemming=False).split()
         i = 0
         docBlocks = []
         while i < len(doc):
@@ -42,6 +42,7 @@ class TriviaQA:
             wordlist = doc[i : j] 
             docBlocks.append(' '.join(wordlist))
             i += stride
+<<<<<<< HEAD
         return docBlocks
 
     def __len__(self):
@@ -51,3 +52,6 @@ class TriviaQA:
 # idx = t.getRandomIndex()
 # docBlocks = t.getDocBlocks(idx)
 # print(len(docBlocks))
+=======
+        return docBlocks
+>>>>>>> 62f6d8dfa6403407e1475bb6fca47785066c7f5e

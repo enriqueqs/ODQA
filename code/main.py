@@ -4,11 +4,14 @@ import random
 import numpy as np
 from pre_processing import pre_process
 from embeddings.rand_baseline import random_baseline
-from embeddings.TF_IDF import tfidf_vectors, tfidf_embedding
+from embeddings.TF_IDF import TFidf
+from embeddings.Spacy import SpacyEmbed
 from embeddings.triviaData import TriviaQA
 import itertools
 
 td = TriviaQA()
+BERT = SpacyEmbed()
+TFIDF = TFidf()
 
 random.seed(42)
 
@@ -34,7 +37,7 @@ for idx in sample[:10]:
 
     D = list(itertools.chain(*[[qs], qs_p, neg_ex_p_flat]))
 
-    preds.append(tfidf_embedding(D, len(qs_p)))
+    preds.append(BERT.spacyEmbedding(D, len(qs_p)))
     
 
 
