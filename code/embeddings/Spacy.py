@@ -1,4 +1,5 @@
 import spacy
+import numpy as np
 
 class SpacyEmbed:
     def __init__(self):
@@ -7,7 +8,7 @@ class SpacyEmbed:
     def spacyEmbedding(self, corpus, true_idx):
         embeddings = []  
 
-        for idx in corpus:
+        for i in corpus:
             embeddings.append(np.array(self.nlp(corpus[i])))
 
         sim_to_quest = []
