@@ -4,15 +4,17 @@ class SpacyEmbed:
     def __init__(self):
         self.nlp = spacy.load("en_trf_bertbaseuncased_lg")
 
-    def spacyEmbedding(self, corpus, correct_idx):
-        # text = pre_process(text, stopwords=True, lemmitize=True, stemming=True)
-        scores = []
-        question = self.nlp(corpus[0])
-        for i in range(1, len(corpus)):
-            c = self.nlp(corpus[i]) 
-            scores.append(question.similarity(c)) 
-        rs_idx = scores.index(max(scores))
-        if rs_idx < correct_idx:
+    def spacyEmbedding(self, corpus, true_idx):
+        embeddings = []  
+
+        for idx in corpus:
+            embeddings.append(np.array(self.nlp(corpus[i])))
+
+        sim_to_quest = []
+        for _, emb_i in enumerate(embeddings[1:]):
+            sim_to_quest.append(np.dot(emb_i, embeddings[0]))
+
+        if np.argmin(sim_to_quest) < true_idx:
             return 1
         else:
-            return 0
+            return 0        
