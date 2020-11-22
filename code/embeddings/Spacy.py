@@ -17,6 +17,7 @@ class SpacyEmbed:
         scores = []
         question = self.nlp(corpus[0])
         for i in range(1, len(corpus)):
+            print(i)
             c = self.nlp(corpus[i]) 
             scores.append(question.similarity(c)) 
         rs_idx = scores.index(max(scores))
@@ -42,7 +43,7 @@ class SpacyEmbed:
 
 #     return questEmbedding.similarity(docEmbedding)
 
-def 
+
 
 
 
