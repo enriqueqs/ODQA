@@ -27,23 +27,27 @@ class TriviaQA:
         return self.trainData[idx]['question']
 
     def getAnswer(self, idx):
-        return self.trainData[idx]['answers']
+        return self.trainData[idx]['answer']['normalized_value']
 
     def getContext(self, idx):
         return self.trainData[idx]['search_results']['search_context']
     
-    def getDividedDoc(self, idx, length=100, stride=40):
-        context = self.trainData[idx]['search_results']['search_context']
-        context = pre_process(context).split()
+    def getDocBlocks(self, idx, blockSize=100, stride=20):
+        doc = self.getContext(idx)[0]
+        doc = pre_process(doc).split()
         i = 0
-        while i < len(context):
-        # for i in range(len(context)):
-            wordlist = context[i:i+100]
-            ' '.join(wordlist)
-
-
-
-
+        docBlocks = []
+        while i < len(doc):
+            j = i + blockSize
+            wordlist = doc[i : j] 
+            docBlocks.append(' '.join(wordlist))
+            i += stride
+        return docBlocks
 
     def __len__(self):
         return len(self.trainData)
+
+t = TriviaQA()
+idx = t.getRandomIndex()
+docBlocks = t.getDocBlocks(idx)
+print(len(docBlocks))
