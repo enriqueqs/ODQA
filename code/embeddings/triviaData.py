@@ -47,6 +47,7 @@ class TriviaQA:
     def __len__(self):
         return len(self.trainData)
 
+#test
 t = TriviaQA()
 idx = t.getRandomIndex()
 docBlocks = t.getDocBlocks(idx)
