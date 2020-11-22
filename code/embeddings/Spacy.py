@@ -3,7 +3,6 @@ import spacy
 import os
 import sys
 from random import randint
-
 cwd = os.getcwd()
 sys.path.append(cwd + "/code")
 from pre_processing import pre_process
@@ -31,17 +30,10 @@ def getSimilarityScore(questIndex, random=True):
     return questEmbedding.similarity(docEmbedding)
 
 
-
 def getRetriveResult(scores):
-
-    if max(scores) == scores[0]:
-        print(scores)
-        print('successed')
-        return True
-    else:
-        print(scores)
-        print('fail')
-        return False
+    outputMsg = str(scores) + "success" if max(scores) == scores[0] else str(scores) + "fail" 
+    print(outputMsg)
+    return True if max(scores) == scores[0] else False
 
 if __name__ == "__main__":
     scores = []
