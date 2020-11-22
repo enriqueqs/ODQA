@@ -21,18 +21,10 @@ def tfidf_vectors(corpus):
   
     return pd.DataFrame(denselist, columns=feature_names)
 
-def tfidf_embedding(question):
-    embeddings = []
-
-    docs = [pre_process(doc, stopwords=True, lemmitize=True, stemming=False) for doc in dictionary[question]['sources'].values()]
-    question = pre_process(question, stopwords=True, lemmitize=True, stemming=False)
-    
-    
-    
-    corpus = list(itertools.chain(*[[question], docs]))
+def tfidf_embedding(corpus, true_idx):
+    embeddings = []  
 
     df = tfidf_vectors(corpus)
-    print(df)
 
     for _, row in df.iterrows():
         embeddings.append(np.array(row))
@@ -41,13 +33,9 @@ def tfidf_embedding(question):
     for _, emb_i in enumerate(embeddings[1:]):
         sim_to_quest.append(np.dot(emb_i, embeddings[0]))
 
-    print(sim_to_quest, "\n", np.argmin(sim_to_quest), "\n")
-
-    if np.argmin(sim_to_quest) == 0:
+    if np.argmin(sim_to_quest) < true_idx:
         return 1
     else:
         return 0
-print(list(dictionary.keys())[0])
-tfidf_embedding('Where in England was Dame Judi Dench born?')
 
-dictionary[list(dictionary.keys())[0]]['sources'].values()
+

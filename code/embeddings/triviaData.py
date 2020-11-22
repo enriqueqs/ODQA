@@ -24,7 +24,7 @@ class TriviaQA:
         return context[randint(0, len(context)-1)]
 
     def getQuestion(self, idx):
-        return self.trainData[idx]['question']
+        return pre_process(self.trainData[idx]['question'])
 
     def getAnswer(self, idx):
         return self.trainData[idx]['answer']['normalized_value']
@@ -47,7 +47,7 @@ class TriviaQA:
     def __len__(self):
         return len(self.trainData)
 
-t = TriviaQA()
-idx = t.getRandomIndex()
-docBlocks = t.getDocBlocks(idx)
-print(len(docBlocks))
+# t = TriviaQA()
+# idx = t.getRandomIndex()
+# docBlocks = t.getDocBlocks(idx)
+# print(len(docBlocks))
