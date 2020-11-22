@@ -43,23 +43,3 @@ class TriviaQA:
             docBlocks.append(' '.join(wordlist))
             i += stride
         return docBlocks
-
-    def __len__(self):
-<<<<<<< HEAD
-        return len(self.trainData)
-=======
-        return len(self.trainData)
-
-<<<<<<< HEAD
-#test
-t = TriviaQA()
-idx = t.getRandomIndex()
-docBlocks = t.getDocBlocks(idx)
-print(len(docBlocks))
-=======
-# t = TriviaQA()
-# idx = t.getRandomIndex()
-# docBlocks = t.getDocBlocks(idx)
-# print(len(docBlocks))
->>>>>>> 3f9a24171f43d26c2d702d07695d8bb719cdd41b
->>>>>>> 3321ae95d1f0b09aabb5000d05c94964688def94
