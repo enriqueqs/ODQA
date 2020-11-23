@@ -1,23 +1,28 @@
 import nltk
-
-def word_embedding(sentence, model, normalize):
-    embeddings = []
+import numpy as np
+class FastText:
+  def sentence_emb(self, sentence, normalize = False):
+    sentence_sum = []
     words = nltk.word_tokenize(sentence)
 
-    for word in words:
+    return sentence_sum.append(model.word_vec(tmp_word) for tmp_word in words)
 
-        sentence_sum.append(model.word_vec(tmp_word, use_norm=True))
-        if normalize: 
-        embeddings.append(matutils.unitvec(np.array(sentence_sum).mean(axis=0)))
-        else:
-        embeddings.append(np.average(sentence_sum, axis=0))
-  average_embedding = np.average(embeddings, axis=0)
-  if normalize:
-    average_embedding = matutils.unitvec(average_embedding)
-  sim_to_mean = []
-  for i, emb_i in enumerate(embeddings):
-    sim_to_mean.append(np.dot(emb_i, average_embedding))
-  print(words[np.argmin(sim_to_mean)],',', sim_to_mean[np.argmin(sim_to_mean)])
-  #print("\n")
-  #return words[np.argmin(sim_to_mean)], sim_to_mean[np.argmin(sim_to_mean)]
-  return words[np.argmin(sim_to_mean)]
+  def FastText(self, corpus, model, true_idx, normalize = False):
+    embeddings = []
+
+    if normalize: 
+      embeddings.append(self.sentence_emb(paragraph, normalize=True) for paragraph in courpus)
+    else:
+      embeddings.append(self.sentence_emb(sentence, normalize=False) for paragraph in courpus)
+    average_embeddings = [np.average(emb, axis=0) for emb in embeddings]
+    if normalize:
+      average_embedding = matutils.unitvec(average_embedding)
+    
+    sim_to_qs = []
+    for i, emb_i in enumerate(embeddings):
+      sim_to_qs.append(np.dot(emb_i, average_embedding))
+
+    if np.argmin(sim_to_qs) < true_idx:
+      return 1
+    else:
+      return 0
