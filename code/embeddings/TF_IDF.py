@@ -22,7 +22,7 @@ class TFidf:
     
         return pd.DataFrame(denselist, columns=feature_names)
 
-    def tfidf_embedding(self, corpus, true_idx):
+    def tfidf_embedding(self, corpus, true_idx, answer):
         df = self.tfidf_vectors(corpus)
         question = corpus[0]
         passages = corpus[1:]
