@@ -145,3 +145,10 @@ reduced_dataset2 = one_to_one(train_0_200_ds)
 data_path="/Users/enriqueqs/Github_repos/ODQA/data/processed"
 with open(data_path + '/data_one.pickle', 'wb') as f:
     pickle.dump(reduced_dataset2, f)
+
+
+
+
+
+
+
