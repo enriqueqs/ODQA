@@ -22,7 +22,9 @@ The shortest distance passage that also contains the answer is selected as $p^{+
 ### Loss function
 The model is trained to optimize the negative log likelihood of the positive passage. This metric is applied to create a vector space such that the distance between pairs of questions and relevant passages will be smaller.
 
-$L=-\log \frac{e^{\operatorname{sim}\left(q_{i} ; p_{i}^{+}\right)}}{e^{\operatorname{sim}\left(q_{i}, p_{i}^{p}\right)}+\sum_{j=1}^{n} e^{\sin \left(q_{i}, p_{i, j}^{-}\right)}},$ where $\operatorname{sim}(q, p)=E_{Q}(q)^{\top} E_{P}(p)$
+\begin{equation}
+L=-\log \frac{e^{\operatorname{sim}\left(q_{i} ; p_{i}^{+}\right)}}{e^{\operatorname{sim}\left(q_{i}, p_{i}^{p}\right)}+\sum_{j=1}^{n} e^{\sin \left(q_{i}, p_{i, j}^{-}\right)}}, \text {where } \operatorname{sim}(q, p)=E_{Q}(q)^{\top} E_{P}(p)
+\end{equation}
 
 ### RetrvBERT
 The pipeline used to fine-tune BERT base-uncased. We call the output **RetrvBERT**.
