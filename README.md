@@ -15,14 +15,14 @@ For this work the [Trivia QA dataset](https://huggingface.co/datasets/trivia_qa)
 
 
 ### Pre-processing
-Each question $q_{i}$ is paired with a positive passage $p_{i}$. The positive passage is obtained by splitting the contextual documents into passages of **100 words**. Passages are ranked by its distance to the question using the dot product of the TF-IDF embeddings as the distance metric. 
+Each question q is paired with a positive passage p<sup>+</sup>. The positive passage is obtained by splitting the contextual documents into passages of **100 words**. Passages are ranked by its distance to the question using the dot product of the TF-IDF embeddings as the distance metric. 
 
-The shortest distance passage that also contains the answer is selected as $p^{+}$. By having pairs ($q_{i}$ ,$p^{+}_{i}$), we relate questions to negative passages for training, by selecting an arbitrary number of random selected positive passages paired with other questions which appear in the training data.
+The shortest distance passage that also contains the answer is selected as the p<sup>+</sup><sub>i</sub>. By having pairs (q<sub>i</sub> ,p<sup>+</sup><sub>i</sub>), we relate questions to negative passages for training, by selecting an arbitrary number of random selected positive passages paired with other questions which appear in the training data.
 
 ### Loss function
 The model is trained to optimize the negative log likelihood of the positive passage. This metric is applied to create a vector space such that the distance between pairs of questions and relevant passages will be smaller.
 
-![L=-\log \frac{e^{\operatorname{sim}\left(q_{i} ; p_{i}^{+}\right)}}{e^{\operatorname{sim}\left(q_{i}, p_{i}^{p}\right)}+\sum_{j=1}^{n} e^{\sin \left(q_{i}, p_{i, j}^{-}\right)}}, \text {where } \operatorname{sim}(q, p)=E_{Q}(q)^{\top} E_{P}(p)](https://latex.codecogs.com/gif.latex?\begin{equation}&space;L=-\log&space;\frac{e^{\operatorname{sim}\left(q_{i}&space;;&space;p_{i}^{&plus;}\right)}}{e^{\operatorname{sim}\left(q_{i},&space;p_{i}^{p}\right)}&plus;\sum_{j=1}^{n}&space;e^{\sin&space;\left(q_{i},&space;p_{i,&space;j}^{-}\right)}},&space;\text&space;{where&space;}&space;\operatorname{sim}(q,&space;p)=E_{Q}(q)^{\top}&space;E_{P}(p)&space;\end{equation})
+![LossFunction](https://latex.codecogs.com/gif.latex?\begin{equation}&space;L=-\log&space;\frac{e^{\operatorname{sim}\left(q_{i}&space;;&space;p_{i}^{&plus;}\right)}}{e^{\operatorname{sim}\left(q_{i},&space;p_{i}^{p}\right)}&plus;\sum_{j=1}^{n}&space;e^{\sin&space;\left(q_{i},&space;p_{i,&space;j}^{-}\right)}},&space;\text&space;{where&space;}&space;\operatorname{sim}(q,&space;p)=E_{Q}(q)^{\top}&space;E_{P}(p)&space;\end{equation})
 
 ### RetrvBERT
 The pipeline used to fine-tune BERT base-uncased. We call the output **RetrvBERT**.
